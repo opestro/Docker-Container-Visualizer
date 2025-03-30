@@ -14,9 +14,9 @@ function initializeGraph() {
                     'label': function (ele) {
                         const data = ele.data('containerData');
                         return [
-                            `Name: ${data.name}`,
-                            `Status: ${data.state}`,
-                            `Image: ${data.image.split(':')[0]}`
+                            `📦 ${data.name}`,
+                            `🚦 ${data.state}`,
+                            `🏷️ ${data.image.split(':')[0]}`
                         ].join('\n');
                     },
                     'background-color': '#2B3A67',
@@ -31,10 +31,10 @@ function initializeGraph() {
                     'color': '#ffffff',
                     'text-valign': 'center',
                     'text-halign': 'center',
+                    'text-background-opacity': 0,
                     'font-family': 'Consolas',
                     'padding': '10px',
-                    'border-radius': 10,
-                    'box-shadow': '0 0 10px #5C7AEA'
+                    'text-margin-y': 0
                 }
             },
             {
@@ -52,12 +52,11 @@ function initializeGraph() {
                     'font-size': 13,
                     'color': '#ffffff',
                     'text-valign': 'center',
-                    'text-halign': 'left',
+                    'text-halign': 'center',
+                    'text-background-opacity': 0,
                     'padding': '25px',
-                    'border-radius': 10,
-                    'box-shadow': '0 0 15px #5C7AEA',
-                    'text-margin-x': 10,
-                    'text-margin-y': 10,
+                    'text-margin-x': 0,
+                    'text-margin-y': 0,
                     'font-family': 'Consolas, monospace'
                 }
             },
@@ -125,50 +124,42 @@ function showContainerDetailsAsNode(container, sourceNode) {
         cy.remove('#details-edge');
     }
 
-    // Calculate position based on viewport
-    const viewport = cy.extent();
-    const sourcePos = sourceNode.position();
-    let xOffset = 350;
-    let yOffset = 0;
-
-    // Check if placing to the right would go off screen
-    if (sourcePos.x + xOffset > viewport.x2) {
-        xOffset = -350; // Place to the left instead
-    }
-
-    // Format the details content with better spacing
+    // Format the details content with emojis
     const detailsContent = [
         `🔍 Container Details`,
-        `━━━━━━━━━━━━━━━━━━`,
-        `📌 ID: ${container.id}`,
+        `━━━━━━━━━━━━━━━━━━━`,
+        `🆔 ID: ${container.id}`,
         `📝 Name: ${container.name}`,
         `🖼️ Image: ${container.image}`,
         `⚡ Status: ${container.status}`,
         ``,
         `🌐 Networks:`,
-        ...Object.entries(container.networks || {}).map(([name, details]) =>
-            `   • ${name}\n     IP: ${details.IPAddress}\n     Gateway: ${details.Gateway}`
+        ...Object.entries(container.networks || {}).map(([name, details]) => 
+            `  • ${name} (IP: ${details.IPAddress})`
         ),
         ``,
         `🔌 Ports:`,
-        ...(container.ports || []).map(port =>
-            `   • ${port.PublicPort ? `${port.PublicPort}:` : ''}${port.PrivatePort}/${port.Type}`
+        ...(container.ports || []).map(port => 
+            `  • ${port.PublicPort ? `${port.PublicPort}:` : ''}${port.PrivatePort}/${port.Type}`
         )
     ].join('\n');
 
-    // Add details node with adjusted position
+    // Add details node with positioning
+    const position = {
+        x: sourceNode.position('x') + 350,
+        y: sourceNode.position('y')
+    };
+
+    // Add the node
     detailsNode = cy.add([
         {
             group: 'nodes',
-            data: {
+            data: { 
                 id: 'details',
                 label: detailsContent
             },
             classes: 'details',
-            position: {
-                x: sourcePos.x + xOffset,
-                y: sourcePos.y + yOffset
-            }
+            position: position
         },
         {
             group: 'edges',
@@ -176,23 +167,51 @@ function showContainerDetailsAsNode(container, sourceNode) {
                 id: 'details-edge',
                 source: sourceNode.id(),
                 target: 'details'
-            },
-            classes: 'details-edge'
+            }
         }
     ]);
 
-    // Add specific style for details edge
-    cy.style().selector('.details-edge').style({
-        'curve-style': 'bezier',
-        'line-style': 'dashed',
-        'line-color': '#5C7AEA',
-        'width': 2,
-        'target-arrow-shape': 'none',
-        'source-arrow-shape': 'none'
-    }).update();
+    // Add styling for details node
+    cy.style()
+        .selector('node.details')
+        .style({
+            'text-wrap': 'wrap',
+            'text-max-width': 300,
+            'text-valign': 'center',
+            'text-halign': 'center',
+            'height': 400,  // Increase height to fit all content
+            'width': 350,
+            'shape': 'round-rectangle',
+            'background-color': '#1A2942',
+            'border-color': '#5C7AEA',
+            'border-width': 2,
+            'padding': 20,
+            'font-size': 14,
+            'text-margin-y': 0,
+            'font-family': 'Consolas, monospace',
+            'color': '#ffffff',
+            'text-outline-width': 0,
+            'text-outline-opacity': 0
+        })
+        .update();
 
-    // Fit to show both nodes with padding
-    cy.fit(cy.collection([sourceNode, detailsNode]), 100);
+    // Also update container nodes with emojis
+    cy.style()
+        .selector('node.container')
+        .style({
+            'label': function(ele) {
+                const data = ele.data('containerData');
+                return [
+                    `📦 ${data.name}`,
+                    `🚦 ${data.state}`,
+                    `🏷️ ${data.image.split(':')[0]}`
+                ].join('\n');
+            }
+        })
+        .update();
+
+    // Fit to show both nodes
+    cy.fit(cy.collection([sourceNode, detailsNode]), 50);
 }
 
 function removeDetailsNode() {
