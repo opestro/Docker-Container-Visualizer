@@ -51,6 +51,43 @@ app.get('/api/test', async (req, res) => {
     }
 });
 
+// Add these routes to your server.js
+app.post('/api/containers/:id/:action', async (req, res) => {
+    const { id, action } = req.params;
+    
+    try {
+        const container = docker.getContainer(id);
+        
+        switch(action) {
+            case 'start':
+                await container.start();
+                break;
+            case 'stop':
+                await container.stop();
+                break;
+            case 'restart':
+                await container.restart();
+                break;
+            case 'pause':
+                await container.pause();
+                break;
+            case 'resume':
+                await container.unpause();
+                break;
+            case 'remove':
+                await container.remove({ force: true });
+                break;
+            default:
+                return res.status(400).json({ error: 'Invalid action' });
+        }
+        
+        res.json({ success: true, action, id });
+    } catch (error) {
+        console.error(`Error executing ${action} on container ${id}:`, error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
