@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # Our Docker visualizer app
+  docker-visualizer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - viz-network
+
+  # A simple web app
+  webapp:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    networks:
+      - viz-network
+      - app-network
+
+  # Redis for demonstration
+  redis:
+    image: redis:alpine
+    networks:
+      - app-network
+
+  # MongoDB for demonstration
+  mongodb:
+    image: mongo:latest
+    networks:
+      - db-network
+
+networks:
+  viz-network:
+  app-network:
+  db-network:

@@ -1,0 +1,165 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #1E1E1E;  /* Dark background like UE */
+    color: #ffffff;
+    overflow: hidden; /* Prevent scrolling */
+}
+
+#container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+h1 {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #00ADB5;
+    font-size: 24px;
+    z-index: 1;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(0, 173, 181, 0.3);
+}
+
+#network {
+    width: 100%;
+    height: 100%;
+    background: #1E1E1E;
+    background-image: 
+        linear-gradient(rgba(40, 44, 52, 0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(40, 44, 52, 0.5) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.container-details {
+    position: fixed;
+    background: #1E1E1E;
+    border: 2px solid #00ADB5;
+    border-radius: 8px;
+    padding: 20px;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 173, 181, 0.3),
+                inset 0 0 15px rgba(0, 173, 181, 0.1);
+    z-index: 9999;
+}
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #252525;
+    padding: 15px;
+    border-bottom: 2px solid #00ADB5;
+    margin: -20px -20px 20px -20px;
+}
+
+.details-header h2 {
+    margin: 0;
+    color: #00ADB5;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #00ADB5;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.detail-group {
+    background: #252525;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #00ADB5;
+    position: relative;
+}
+
+.detail-group::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    border: 1px solid rgba(0, 173, 181, 0.3);
+    border-radius: 5px;
+    pointer-events: none;
+}
+
+.detail-label {
+    color: #00ADB5;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.detail-value {
+    color: #ffffff;
+    font-family: 'Consolas', monospace;
+    font-size: 14px;
+    padding: 5px;
+    background: rgba(0, 173, 181, 0.1);
+    border-radius: 3px;
+}
+
+.networks-list, .ports-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.network-item, .port-item {
+    display: inline-block;
+    background: rgba(0, 173, 181, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Animation classes */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add a subtle transition for smoother dragging */
+.container-details {
+    transition: box-shadow 0.3s ease;
+}
+
+.container-details:active {
+    box-shadow: 0 0 30px rgba(0, 173, 181, 0.4),
+                inset 0 0 20px rgba(0, 173, 181, 0.2);
+}
+
+/* Add overlay when popup is visible */
+.container-details:not(.hidden)::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
