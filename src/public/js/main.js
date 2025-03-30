@@ -124,6 +124,22 @@ function showContainerDetailsAsNode(container, sourceNode) {
         cy.remove('#details-edge');
     }
 
+    // Determine which actions are available based on container state
+    const isRunning = container.state.toLowerCase() === 'running';
+    const isPaused = container.state.toLowerCase() === 'paused';
+    const isStopped = container.state.toLowerCase() === 'exited';
+    
+    // Create action buttons section
+    const actionButtons = [
+        `🎮 Actions:`,
+        isRunning ? `  • ⏸️ [Pause]` : ``,
+        isPaused ? `  • ▶️ [Resume]` : ``,
+        isRunning || isPaused ? `  • ⏹️ [Stop]` : ``,
+        isStopped ? `  • ▶️ [Start]` : ``,
+        `  • 🔄 [Restart]`,
+        `  • 🗑️ [Remove]`
+    ].filter(btn => btn !== ``).join('\n');
+
     // Format the details content with emojis
     const detailsContent = [
         `🔍 Container Details`,
@@ -132,6 +148,8 @@ function showContainerDetailsAsNode(container, sourceNode) {
         `📝 Name: ${container.name}`,
         `🖼️ Image: ${container.image}`,
         `⚡ Status: ${container.status}`,
+        ``,
+        `${actionButtons}`,
         ``,
         `🌐 Networks:`,
         ...Object.entries(container.networks || {}).map(([name, details]) => 
@@ -156,7 +174,8 @@ function showContainerDetailsAsNode(container, sourceNode) {
             group: 'nodes',
             data: { 
                 id: 'details',
-                label: detailsContent
+                label: detailsContent,
+                containerData: container
             },
             classes: 'details',
             position: position
@@ -179,7 +198,7 @@ function showContainerDetailsAsNode(container, sourceNode) {
             'text-max-width': 300,
             'text-valign': 'center',
             'text-halign': 'center',
-            'height': 400,  // Increase height to fit all content
+            'height': 450,  // Increased height to fit action buttons
             'width': 350,
             'shape': 'round-rectangle',
             'background-color': '#1A2942',
@@ -195,23 +214,69 @@ function showContainerDetailsAsNode(container, sourceNode) {
         })
         .update();
 
-    // Also update container nodes with emojis
-    cy.style()
-        .selector('node.container')
-        .style({
-            'label': function(ele) {
-                const data = ele.data('containerData');
-                return [
-                    `📦 ${data.name}`,
-                    `🚦 ${data.state}`,
-                    `🏷️ ${data.image.split(':')[0]}`
-                ].join('\n');
-            }
-        })
-        .update();
+    // Add click handler for details node to handle button clicks
+    cy.on('tap', 'node.details', function(evt) {
+        const node = evt.target;
+        const containerData = node.data('containerData');
+        
+        // Get click position relative to node content
+        const evtPos = evt.position;
+        const nodePos = node.position();
+        const relY = evtPos.y - nodePos.y + 225; // Approximate center offset
+        
+        // Calculate which line was clicked (rough estimate)
+        const lineHeight = 18; // Approximate line height
+        const clickedLine = Math.floor(relY / lineHeight);
+        
+        // Check if click is in the actions section (lines 8-14 approximately)
+        if (clickedLine >= 8 && clickedLine <= 14) {
+            handleActionButtonClick(containerData, clickedLine - 8);
+        }
+    });
 
     // Fit to show both nodes
     cy.fit(cy.collection([sourceNode, detailsNode]), 50);
+}
+
+// Handle container action button clicks
+function handleActionButtonClick(container, buttonIndex) {
+    // Get container ID
+    const containerId = container.id;
+    
+    // Determine which button was clicked
+    const actionMap = {
+        1: 'pause',
+        2: 'resume',
+        3: 'stop',
+        4: 'start',
+        5: 'restart',
+        6: 'remove'
+    };
+    
+    const action = actionMap[buttonIndex];
+    if (!action) return;
+    
+    console.log(`Executing ${action} on container ${container.name}`);
+    
+    // Make API call to perform the action
+    fetch(`/api/containers/${containerId}/${action}`, {
+        method: 'POST'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Failed to ${action} container`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(`Container ${action} successful:`, data);
+        // Refresh the graph after a short delay
+        setTimeout(updateGraph, 1000);
+    })
+    .catch(error => {
+        console.error(`Error ${action} container:`, error);
+        alert(`Failed to ${action} container: ${error.message}`);
+    });
 }
 
 function removeDetailsNode() {

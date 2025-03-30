@@ -1,0 +1,389 @@
+/* Node and Edge Styling */
+
+/* Container node styling */
+.node-container {
+    background-color: var(--background-light);
+    border: 2px solid var(--node-border);
+    border-radius: 8px;
+    box-shadow: var(--shadow-medium);
+    width: 250px;
+    height: 80px;
+    padding: 12px;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.node-container:hover {
+    box-shadow: var(--glow);
+    transform: translateY(-2px);
+}
+
+.node-container:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--running);
+}
+
+.node-container.paused:before {
+    background-color: var(--paused);
+}
+
+.node-container.stopped:before {
+    background-color: var(--stopped);
+}
+
+.node-container.created:before {
+    background-color: var(--created);
+}
+
+.node-name {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+.node-status {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.node-image {
+    font-size: 12px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.status-badge {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.status-badge.running {
+    background-color: var(--running);
+}
+
+.status-badge.paused {
+    background-color: var(--paused);
+}
+
+.status-badge.stopped {
+    background-color: var(--stopped);
+}
+
+.status-badge.created {
+    background-color: var(--created);
+}
+
+/* Details node styling */
+.node-details {
+    background-color: var(--background-medium);
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    box-shadow: var(--shadow-large);
+    width: 380px;
+    padding: 0;
+    transition: all 0.2s ease;
+    overflow: hidden;
+}
+
+.node-details-header {
+    background-color: var(--background-light);
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.node-details-title {
+    color: var(--primary-light);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.node-details-content {
+    padding: 16px;
+}
+
+.detail-section {
+    margin-bottom: 16px;
+}
+
+.detail-section-title {
+    font-size: 13px;
+    color: var(--primary-light);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.detail-row {
+    display: flex;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.detail-label {
+    flex: 0 0 100px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.detail-value {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    word-break: break-all;
+}
+
+/* Action buttons */
+.actions-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
+.action-button {
+    background-color: var(--background-light);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-bright);
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-main);
+    outline: none;
+}
+
+.action-button:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary);
+}
+
+.action-button:active {
+    transform: translateY(1px);
+}
+
+.action-button.start {
+    border-color: var(--running);
+}
+
+.action-button.pause {
+    border-color: var(--paused);
+}
+
+.action-button.stop {
+    border-color: var(--stopped);
+}
+
+.action-button.remove {
+    border-color: #FF5252;
+}
+
+.action-button.start:hover {
+    background-color: rgba(0, 195, 154, 0.2);
+}
+
+.action-button.pause:hover {
+    background-color: rgba(255, 185, 0, 0.2);
+}
+
+.action-button.stop:hover {
+    background-color: rgba(231, 72, 86, 0.2);
+}
+
+.action-button.remove:hover {
+    background-color: rgba(255, 82, 82, 0.2);
+}
+
+/* Network and port styling */
+.network-item, .port-item {
+    background-color: var(--background-light);
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.network-name, .port-mapping {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.network-details, .port-details {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+}
+
+/* Edge styling */
+.edge {
+    width: 2px;
+    stroke: var(--primary);
+    stroke-dasharray: 5;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.edge:hover {
+    opacity: 1;
+    stroke-width: 3px;
+}
+
+.edge-label {
+    background-color: var(--background-medium);
+    color: var(--text-bright);
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+/* Loading placeholder for nodes */
+.node-loading {
+    background: linear-gradient(90deg, 
+        var(--background-light) 25%, 
+        var(--background-medium) 50%, 
+        var(--background-light) 75%);
+    background-size: 200% 100%;
+    animation: loading-pulse 1.5s infinite;
+}
+
+@keyframes loading-pulse {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Interactive HTML nodes */
+.cy-node-html-label-interact {
+    pointer-events: all !important;
+}
+
+.cy-node-html-label-interact .action-button {
+    cursor: pointer !important;
+    user-select: none !important;
+    pointer-events: all !important;
+}
+
+/* Action panel - outside of Cytoscape */
+.action-panel {
+    background-color: var(--background-medium);
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    box-shadow: var(--shadow-large);
+    padding: 15px;
+    width: 300px;
+    z-index: 1000;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.action-panel-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--primary-light);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+}
+
+.action-panel-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.real-action-button {
+    background-color: var(--background-light);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-bright);
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-main);
+    outline: none;
+    min-width: 100px;
+    justify-content: center;
+}
+
+.real-action-button:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.real-action-button:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+.real-action-button.start {
+    border-color: var(--running);
+}
+
+.real-action-button.pause {
+    border-color: var(--paused);
+}
+
+.real-action-button.stop {
+    border-color: var(--stopped);
+}
+
+.real-action-button.remove {
+    border-color: #FF5252;
+}
+
+.real-action-button.start:hover {
+    background-color: rgba(0, 195, 154, 0.2);
+}
+
+.real-action-button.pause:hover {
+    background-color: rgba(255, 185, 0, 0.2);
+}
+
+.real-action-button.stop:hover {
+    background-color: rgba(231, 72, 86, 0.2);
+} 
