@@ -35,6 +35,8 @@
 | 🌐 Network Mapping | Visual representation of container relationships |
 | 💾 State Persistence | Maintains position and zoom state |
 | ✨ Visual Effects | Professional glow effects and animations |
+| 🎮 Container Controls | Intuitive action panel to manage containers |
+| 🏷️ Enhanced Labels | Clear network names with improved visibility |
 
 </div>
 
@@ -46,6 +48,7 @@
 [![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 [![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Cytoscape.js](https://img.shields.io/badge/Cytoscape.js-F15A24?style=for-the-badge&logo=javascript&logoColor=white)](https://js.cytoscape.org/)
 
 </div>
 
@@ -73,12 +76,27 @@ Access the visualization at: `http://localhost:3001`
 
 | Action | Description |
 |--------|-------------|
-| 🖱️ Click | View container details |
-| 🔄 Drag | Rearrange container nodes |
-| 🔍 Zoom | Mouse wheel to zoom in/out |
-| 🌐 Pan | Click and drag background |
+| 🖱️ Click Container | View detailed container information |
+| 🔄 Drag | Rearrange container nodes for better visualization |
+| 🔍 Zoom | Mouse wheel to zoom in/out of the graph |
+| 🌐 Pan | Click and drag background to navigate |
+| ⚙️ Container Actions | Manage containers with intuitive action buttons |
+| ❌ Background Click | Close open details panels |
 
 </div>
+
+### 🎮 Container Management
+
+The application allows you to perform the following actions on containers:
+
+- **Start** - Start a stopped container
+- **Stop** - Stop a running container
+- **Pause** - Pause a running container
+- **Resume** - Resume a paused container
+- **Restart** - Restart a container
+- **Remove** - Remove a container from the system
+
+All actions are available through an intuitive action panel that automatically adapts to the container's current state.
 
 ## 🐋 Docker Support
 
