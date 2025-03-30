@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![Made with Love](https://img.shields.io/badge/Made%20With-Love-red.svg?style=for-the-badge)](https://github.com/opestro)
 
-<img src="./preview/1.png" alt="Docker Container Visualization" width="100%"/>
+<img src="./preview/image.png" alt="Docker Container Visualization" width="100%"/>
 
 ### Beautiful Blueprint-Style Docker Container Visualization
 
